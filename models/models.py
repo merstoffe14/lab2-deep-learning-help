@@ -39,25 +39,21 @@ class Classifier(nn.Module):
             Use options.hidden_sizes to store all hidden sizes, (for simplicity, you might want to 
             include the input and output as well).
         """
-        #hidden_sizes ??
-
-        #ik heb hier nu willekeurige in en out features genomen.
-        #test eens wat er gebeurt als de in featerus van layer 2 niet gelijk is aan de out features van layer 1
-        
+        #I did not store my hidden sizes in options.hidden_sizes, I ignored this this part of the task at first and did not end up implementing it.
 
         # Linear and ReLu (28*28 pixels so  784 in_features)
         self.layer1 = nn.Sequential(
-            nn.Linear(in_features= 28*28, out_features= 50),
+            nn.Linear(in_features= 28*28, out_features= 200),
             nn.ReLU()
         )
         # Linear and ReLu
         self.layer2 = nn.Sequential(
-            nn.Linear(in_features=50, out_features= 50),
+            nn.Linear(in_features=200, out_features= 200),
             nn.ReLU()        
         )
         # Linear and softmax (softmax normalizes the last layer, so every value between [0 1] and sum(layer) = 1)
         self.layer3 = nn.Sequential(
-            nn.Linear(in_features=50, out_features=10),
+            nn.Linear(in_features=200, out_features=10),
             nn.Softmax(dim=1)
         )
         """END TODO"""

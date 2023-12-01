@@ -6,7 +6,7 @@ class ClassificationOptions(Options):
         super().__init__()
         # dataset related
         self.batch_size_test = 1000
-        self.batch_size_train = 64
+        self.batch_size_train = 16
 
         # hyperparameters
         self.lr = 1

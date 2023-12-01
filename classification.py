@@ -19,7 +19,7 @@ if __name__ == "__main__":
     model = Classifier(options)
     model.to(options.device)
     # define the opimizer (I used the SGD optimizer, no good explain why.)
-    learning_rate = 0.0089
+    learning_rate = 0.009
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
     # train the model
     utils.train_classification_model(model, optimizer, dataset, options)

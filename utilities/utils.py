@@ -124,6 +124,7 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
             batch_size = x.shape[0]
             x = x.view(batch_size, -1)
             output = model.forward(x)
+            print(output)
             # calculate the loss, use your previously defined criterion
             # print(f"x after view: {x.size()}")
             # print(f"output: {output.size()}")
@@ -132,8 +133,8 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
             #first I had num_classes at -1, so it would be inferred. But this failed at iteration 56, In this batch, none of the outcomes were '9'. So the size of y after onehot became [64,9], 
             # which would make the lossfunction crash
             y = nn.functional.one_hot(y,num_classes=10)
-            # print(f"y one hot: {y.size()}")
-            # print(y)
+            print(f"y one hot: {y.size()}")
+            print(y)
             # print(output)
             # deze x en y komen niet overeen van grootte en soort, dus eigenlijk kan je hier geen loss van berekenen, daarom geraak ik maar aan een accuracy van 83 procent.
             # Dus de orginele x is [64, 1, 28, 28]. Dit zijn dus 64 (batch size) zwart wit images van 28*28, hier maken we met .view
@@ -145,6 +146,7 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
             # ik kreeg een type error dus dit zorgt er voor dat ze dezelfde type hebben.
             y = y.float()
             loss = criterion(output,y)
+            print(f"loss: {loss}")
             # zero out all gradients
             optimizer.zero_grad()
             # propagate the loss backward
