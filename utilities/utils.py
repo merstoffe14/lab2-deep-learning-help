@@ -104,21 +104,46 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
     # volgens deze website: https://neptune.ai/blog/pytorch-loss-functions
     # The Negative Log-Likelihood Loss function (NLL) is applied only on models with the softmax function as an output activation layer.
     # Multi-class classification problems
-    criterion = nn.NLLLoss()
+    # criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
+    #NLLLoss had percies problemen met mutli target? probeer nog eens later en zie error, NLLLoss is enkel voor 
     """END TODO"""
     for epoch in range(options.num_epochs):
         running_loss = 0
+        ct = 0
         for x, y in dataset.train_loader:
+            ct += 1
+            # print(ct)
             y = y.to(options.device)
             """START TODO: fill in the gaps as mentioned by the comments"""
             # forward the data x through the model.
             # Note: x does not have the correct shape,
             # it should become (batch_size, -1), where the size -1 is inferred from other dimensions
             # (see TORCH.TENSOR.VIEW on the PyTorch documentation site)
-            x = x.view(,-1)
-            print(x.size())
+            # print(f"x before view: {x.size()}")
+            batch_size = x.shape[0]
+            x = x.view(batch_size, -1)
             output = model.forward(x)
             # calculate the loss, use your previously defined criterion
+            # print(f"x after view: {x.size()}")
+            # print(f"output: {output.size()}")
+            # print(f"y: {y.size()}")
+            # print(y)
+            #first I had num_classes at -1, so it would be inferred. But this failed at iteration 56, In this batch, none of the outcomes were '9'. So the size of y after onehot became [64,9], 
+            # which would make the lossfunction crash
+            y = nn.functional.one_hot(y,num_classes=10)
+            # print(f"y one hot: {y.size()}")
+            # print(y)
+            # print(output)
+            # deze x en y komen niet overeen van grootte en soort, dus eigenlijk kan je hier geen loss van berekenen, daarom geraak ik maar aan een accuracy van 83 procent.
+            # Dus de orginele x is [64, 1, 28, 28]. Dit zijn dus 64 (batch size) zwart wit images van 28*28, hier maken we met .view
+            # dit zetten we om met view naar iets van 2 dimensies, de batch size en een inferred dimentie (-1). De inferred dimensie is hier 28*28. Dus nu hebben we een input
+            # tensor die 64 1d vectors zijn.
+            # de output is per 1d 784 vector een 1d vector van 10 lang (64 keer want batch size). Deze 10 end values zullen door de softmax de kansverdeling zijn van de cijfers 0-9.
+            # de gewenste output (y) is een 1d tensor van 64 lang, die op elke positie het juiste cijfer bevat, dus nu moeten we met oneHot, y op output laten lijken (dus [64,10])
+
+            # ik kreeg een type error dus dit zorgt er voor dat ze dezelfde type hebben.
+            y = y.float()
             loss = criterion(output,y)
             # zero out all gradients
             optimizer.zero_grad()
@@ -126,7 +151,7 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
             loss.backward()
             # use your optimizer to perform an update step
             optimizer.step()
-
+            
             """END TODO"""
             # this is from the regression one, just to compare.
             #  # Forward the size data through the model

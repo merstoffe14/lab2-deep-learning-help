@@ -7,4 +7,6 @@ class Options:
         # model related
         self.save_path = "./models/"
         self.load_path = "./models/"
-        self.model_name = "lin_reg.pth"
+        # change this to change the model that we want to use.
+        # self.model_name = "lin_reg.pth"
+        self.model_name = "classification.pth"       

@@ -52,13 +52,12 @@ class Classifier(nn.Module):
         )
         # Linear and ReLu
         self.layer2 = nn.Sequential(
-            nn.Linear(in_features=50, out_features= 20),
-            nn.ReLU()
-            
+            nn.Linear(in_features=50, out_features= 50),
+            nn.ReLU()        
         )
         # Linear and softmax (softmax normalizes the last layer, so every value between [0 1] and sum(layer) = 1)
         self.layer3 = nn.Sequential(
-            nn.Linear(in_features=20, out_features=10),
+            nn.Linear(in_features=50, out_features=10),
             nn.Softmax(dim=1)
         )
         """END TODO"""
